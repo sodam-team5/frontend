@@ -7,7 +7,7 @@ const Header = () => {
   const router = useRouter();
 
   const homeButtonClick = () => {
-    router.push("/main");
+    router.push("/");
   }
 
   return (

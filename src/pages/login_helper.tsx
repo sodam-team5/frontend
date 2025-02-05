@@ -10,27 +10,33 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   const loginButtonClick = () => {
-    router.push("/main");
+    router.push("/main_helper");
+  }
+
+  const signUpButtonClick = () => {
+    router.push("/signup");
   }
 
   return (
     <div className="flex flex-col items-center gap-4 p-6">
       <h1 className="text-xl font-bold">로그인</h1>
 
-      {/* 이름 입력 */}
+      <h3>이메일</h3>
+      {/* 이메일 입력 */}
       <input
         type="text"
-        placeholder="이름"
+        placeholder="이메일"
         value={name}
         onChange={(e) => setName(e.target.value)}
         className="border p-2 rounded-lg w-64"
       />
 
-      {/* 생년월일 입력 (YYYY-MM-DD) */}
+      {/* 비밀번호 입력 */}
       <input
-        type="date"
-        value={birthDate}
-        onChange={(e) => setBirthDate(e.target.value)}
+        type="text"
+        placeholder="비밀번호"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
         className="border p-2 rounded-lg w-64"
       />
 
@@ -39,6 +45,21 @@ export default function Login() {
         onClick={loginButtonClick}>
         로그인
       </button>
+
+      <button className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+        onClick={loginButtonClick}>
+        구글 로그인
+      </button>
+
+      <button className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+        onClick={signUpButtonClick}>
+        회원이 아니신가요?
+      </button>
+
+      <button className="bg-blue-500 text-white px-4 py-2 rounded-lg">
+        계정 찾기
+      </button>
+
     </div>
   );
 }
