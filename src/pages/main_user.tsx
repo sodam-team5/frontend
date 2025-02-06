@@ -33,14 +33,11 @@ export default function Mainuser() {
 
       {/* 어르신 탭 - 요약*/}
 
-
       <button
         className="border-2 border-black rounded-lg px-4 py-2"
         onClick={dailyRecordButtonClick}>
         오늘 하루 전하기
       </button>
-
-
 
       <button
         className="border-2 border-black rounded-lg px-4 py-2"
@@ -48,8 +45,6 @@ export default function Mainuser() {
       >
         로그아웃
       </button>
-
-
 
     </div>
   );

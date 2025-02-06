@@ -11,10 +11,11 @@ const Header = () => {
   }
 
   return (
-    <header className="h-[50px] bg-green-900 flex items-center justify-center">
+    <header className="flex ml-[205px] mt-[85px]">
       <div className="">
-        <button className="text-[15px] text-white "
-          onClick={homeButtonClick}> 서비스 이름</button >
+        <button className="text-[27px] font-bold"
+          onClick={homeButtonClick}> 소담
+        </button >
       </div>
 
     </header>

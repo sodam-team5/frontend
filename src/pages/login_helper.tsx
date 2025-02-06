@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-export default function Login() {
+export default function Login_helper() {
   const router = useRouter();
   const [role, setRole] = useState<string | null>(null);
   const [name, setName] = useState("");
