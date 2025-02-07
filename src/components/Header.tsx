@@ -13,8 +13,8 @@ const Header = () => {
   return (
     <header className="flex ml-[205px] mt-[85px]">
       <div className="">
-        <button className="text-[27px] font-bold"
-          onClick={homeButtonClick}> 소담
+        <button onClick={homeButtonClick}>
+          <Image src="/images/logo.svg" alt="logo" width={47} height={32} />
         </button >
       </div>
 
