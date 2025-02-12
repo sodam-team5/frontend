@@ -15,7 +15,7 @@ export default function Mainuser() {
   }, [router]);
 
   const dailyRecordButtonClick = () => {
-    router.push("/dailyRecord_user");
+    router.push("/user/dailyRecord");
   };
 
   const logoutButtonClick = () => {

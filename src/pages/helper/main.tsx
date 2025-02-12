@@ -20,7 +20,7 @@ export default function Mainhelper() {
   };
 
   const settingsPageButtonClick = () => {
-    router.push("/settings_helper");
+    router.push("/helper/account/register");
   };
 
   return (

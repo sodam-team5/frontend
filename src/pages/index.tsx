@@ -8,7 +8,7 @@ export default function Home() {
   const handleUserRoleSelection = () => {
     setRole("user");
     sessionStorage.setItem("role", "user"); // 선택 즉시 sessionStorage에 저장
-    router.push("/login_user");
+    router.push("/user/login");
   };
 
   const handleHelperRoleSelection = () => {
@@ -17,11 +17,11 @@ export default function Home() {
   };
 
   const loginPageButtonClick = () => {
-    router.push("/login_helper");
+    router.push("/helper/login");
   };
 
   const signUpPageButtonClick = () => {
-    router.push("/signup");
+    router.push("/helper/signup");
   };
 
   return (

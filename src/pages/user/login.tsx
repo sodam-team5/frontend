@@ -10,11 +10,11 @@ export default function Login_user() {
   const [helpername, setHelperName] = useState("");
 
   const loginButtonClick = () => {
-    router.push("/main_user");
+    router.push("/user/main");
   }
 
   const helperButtonClick = () => {
-    router.push("/login_helper");
+    router.push("/helper/login");
   }
 
   return (
@@ -25,7 +25,6 @@ export default function Login_user() {
           <h2 className="font-bold"> 말벗 로그인 하기   &gt;&gt; </h2>
         </button>
       </div>
-
 
       <div className="flex flex-col items-center gap-4 p-6">
 
