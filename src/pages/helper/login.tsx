@@ -18,7 +18,7 @@ export default function Login_helper() {
   }
 
   const userButtonClick = () => {
-    router.push("/helper/login");
+    router.push("/user/login");
   }
 
   return (
