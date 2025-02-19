@@ -1,7 +1,5 @@
 import { useRouter } from "next/router";
 
-
-
 const SettingButton = () => {
   const router = useRouter()
 
@@ -16,8 +14,6 @@ const SettingButton = () => {
         onClick={ settingButtonClick }>
         계정 관리
       </button>
-
-
 
     </div>
   );

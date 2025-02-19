@@ -39,7 +39,6 @@ export default function RegisterPage() {
 
         <div className="flex flex-row justify-center items-center">
 
-
           <form onSubmit={handleSubmit} className="w-full max-w-sm bg-white p-6 border">
             <div className="mb-4">
               <label className="block text-gray-700 font-medium mb-2">어르신의 성함을 입력해주세요.</label>

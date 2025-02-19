@@ -24,7 +24,7 @@ export default function DailyRecord() {
 
   const handleSubmit = () => {
     // alert(`입력한 답변: ${answer}`);
-    router.push("/complete_user");
+    router.push("/user/complete");
   };
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export default function DailyRecord() {
         event.preventDefault(); // 스페이스바의 기본 동작(스크롤)을 막음
         handleNextQuestion();
       } else {
-        router.push("/complete_user"); // 제출
+        router.push("/user/complete"); // 제출
       }
     };
 
