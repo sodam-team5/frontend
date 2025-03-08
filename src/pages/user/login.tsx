@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import MicStatus from "@/components/MicStatus";
+import LoginRecordButton from "@/components/LoginRecordButton";
 
 export default function Login_user() {
   const router = useRouter();
@@ -43,9 +44,8 @@ export default function Login_user() {
               onChange={(e) => setName(e.target.value)}
               className="border border-[#000000] border-2 p-2 rounded-[5px] w-[200px]"
             />
-            <button className="font-bold border border-[#000000] rounded-[5px] text-[12px] w-[79px]">
-              입력하기
-            </button>
+
+            <LoginRecordButton />
 
             {/* 입력 성공 or 실패 상태 확인 */}
           </div>
