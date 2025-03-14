@@ -3,10 +3,10 @@ import { useState } from "react";
 const LoginRecordButton = () => {
   const [stream, setStream] = useState(null);
   const [media, setMedia] = useState(null);
-  const [onRec, setOnRec] = useState(true);
+  const [onRec, setOnRec] = useState(false); // 초기값 false로 설정
   const [source, setSource] = useState(null);
   const [analyser, setAnalyser] = useState(null);
-  const [audioUrl, setAudioUrl] = useState();
+  const [audioUrl, setAudioUrl] = useState(null); // 녹음된 오디오 URL 저장
 
   const onRecAudio = () => {
     const audioCtx = new AudioContext();
@@ -26,42 +26,61 @@ const LoginRecordButton = () => {
 
     navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
       const mediaRecorder = new MediaRecorder(stream);
-      mediaRecorder.start();
       setStream(stream);
       setMedia(mediaRecorder);
       makeSound(stream);
+
+      mediaRecorder.start();
+      setOnRec(true); // 녹음 시작
+
+      let audioChunks = [];
+      
+      // 오디오 데이터를 저장
+      mediaRecorder.ondataavailable = (e) => {
+        audioChunks.push(e.data);
+      };
+
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+        const audioURL = URL.createObjectURL(audioBlob);
+        setAudioUrl(audioURL);
+      };
     });
-  }
+
+    console.log("녹음 시작");
+  };
 
   const offRecAudio = () => {
-    // dataavailable 이벤트로 Blob 데이터에 대한 응답을 받을 수 있음
-    media.ondataavailable = function (e) {
-      setAudioUrl(e.data);
-      setOnRec(true);
-    };
+    if (!media) return;
 
-    // 모든 트랙에서 stop()을 호출해 오디오 스트림을 정지
-    stream.getAudioTracks().forEach(function (track) {
-      track.stop();
-    });
+    media.stop(); // 녹음 중지
+    stream.getAudioTracks().forEach((track) => track.stop()); // 오디오 스트림 정지
 
-    // 미디어 캡처 중지
-    media.stop();
+    if (analyser) analyser.disconnect();
+    if (source) source.disconnect();
 
-    // 메서드가 호출 된 노드 연결 해제
-    analyser.disconnect();
-    source.disconnect();
-
-
-  }
-
+    setOnRec(false); // 상태 변경
+    console.log("녹음 중지");
+  };
 
   return (
     <div>
-      <button className="font-bold border border-[#000000] rounded-[5px] text-[12px] w-[79px] h-[24px]"
-        onClick={onRec ? onRecAudio : offRecAudio}>입력하기</button>
+      <button
+        className="font-bold border border-[#000000] rounded-[5px] text-[12px] w-[79px] h-[24px]"
+        onClick={onRec ? offRecAudio : onRecAudio}
+      >
+        {onRec ? "녹음 중지" : "녹음 시작"}
+      </button>
 
-      <button>결과 확인</button>
+      {audioUrl && (
+        <div>
+          <p>녹음된 오디오:</p>
+          <audio controls>
+            <source src={audioUrl} type="audio/webm" />
+            브라우저가 오디오 태그를 지원하지 않습니다.
+          </audio>
+        </div>
+      )}
     </div>
   );
 };

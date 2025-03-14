@@ -13,6 +13,7 @@ export default function ModifyPage() {
     e.preventDefault();
     console.log("어르신 성함:", name);
     console.log("어르신 생년월일:", birthdate);
+    console.log("주제: ",topics);
     // API 요청
   };
 
