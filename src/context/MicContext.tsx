@@ -11,6 +11,7 @@ const MicContext = createContext<MicContextType | undefined>(undefined);
 export const MicProvider = ({ children }: { children: ReactNode }) => {
   const [onRec, setOnRec] = useState<boolean>(false);
 
+  console.log("MicProvider 렌더링됨. onRec 상태:", onRec);
   return (
     <MicContext.Provider value={{ onRec, setOnRec }}>
       {children}

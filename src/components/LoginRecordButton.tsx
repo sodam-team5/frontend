@@ -1,41 +1,36 @@
 import { useState } from "react";
+import { useMic } from "@/context/MicContext";
 
 const LoginRecordButton = () => {
-  const [stream, setStream] = useState(null);
-  const [media, setMedia] = useState(null);
-  const [onRec, setOnRec] = useState(false); // 초기값 false로 설정
-  const [source, setSource] = useState(null);
-  const [analyser, setAnalyser] = useState(null);
-  const [audioUrl, setAudioUrl] = useState(null); // 녹음된 오디오 URL 저장
+  const { onRec, setOnRec } = useMic(); // setOnRec 추가
+  const [stream, setStream] = useState<MediaStream | null>(null);
+  const [media, setMedia] = useState<MediaRecorder | null>(null);
+  const [source, setSource] = useState<MediaStreamAudioSourceNode | null>(null);
+  const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
 
-  const onRecAudio = () => {
-    const audioCtx = new AudioContext();
+  const onRecAudio = async () => {
+    try {
+      const audioCtx = new AudioContext();
+      const analyserNode = audioCtx.createAnalyser();
+      analyserNode.fftSize = 2048;
+      setAnalyser(analyserNode);
 
-    // 실시간 오디오 분석을 위한 AnalyserNode 생성
-    const analyser = audioCtx.createAnalyser();
-    analyser.fftSize = 2048; // 주파수 해상도를 설정
-    setAnalyser(analyser);
-
-    function makeSound(stream) {
-      const source = audioCtx.createMediaStreamSource(stream);
-      setSource(source);
-
-      source.connect(analyser); // source → analyser 연결
-      analyser.connect(audioCtx.destination); // 최종 출력
-    }
-
-    navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-      const mediaRecorder = new MediaRecorder(stream);
-      setStream(stream);
+      const userStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(userStream);
+      setStream(userStream);
       setMedia(mediaRecorder);
-      makeSound(stream);
+
+      const sourceNode = audioCtx.createMediaStreamSource(userStream);
+      setSource(sourceNode);
+
+      sourceNode.connect(analyserNode);
+      analyserNode.connect(audioCtx.destination);
 
       mediaRecorder.start();
-      setOnRec(true); // 녹음 시작
+      setOnRec(true); // 녹음 상태 변경
 
-      let audioChunks = [];
-      
-      // 오디오 데이터를 저장
+      let audioChunks: BlobPart[] = [];
       mediaRecorder.ondataavailable = (e) => {
         audioChunks.push(e.data);
       };
@@ -45,21 +40,23 @@ const LoginRecordButton = () => {
         const audioURL = URL.createObjectURL(audioBlob);
         setAudioUrl(audioURL);
       };
-    });
 
-    console.log("녹음 시작");
+      console.log("녹음 시작!");
+    } catch (error) {
+      console.error("오디오 녹음 중 오류 발생:", error);
+    }
   };
 
   const offRecAudio = () => {
-    if (!media) return;
+    if (!media || !stream) return;
 
-    media.stop(); // 녹음 중지
-    stream.getAudioTracks().forEach((track) => track.stop()); // 오디오 스트림 정지
+    media.stop();
+    stream.getTracks().forEach((track) => track.stop());
 
     if (analyser) analyser.disconnect();
     if (source) source.disconnect();
 
-    setOnRec(false); // 상태 변경
+    setOnRec(false); // 녹음 상태 변경
     console.log("녹음 중지");
   };
 

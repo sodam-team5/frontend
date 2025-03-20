@@ -65,9 +65,11 @@ export default function Login_user() {
               onChange={(e) => setHelperName(e.target.value)}
               className="border border-[#000000] border-2 p-2 rounded-[5px] w-[200px]"
             />
-            <button className="font-bold border border-[#000000] rounded-[5px] text-[12px] w-[79px]">
+            {/* <button className="font-bold border border-[#000000] rounded-[5px] text-[12px] w-[79px]">
               입력하기
-            </button>
+            </button> */}
+
+            <LoginRecordButton />
             {/* 입력 성공 or 실패 상태 확인 */}
           </div>
         </div>
@@ -102,6 +104,9 @@ export default function Login_user() {
           </div>
         </div>
       </div>
+
+
+
 
       {/* 현재 마이크 상태 */}
     </div>
