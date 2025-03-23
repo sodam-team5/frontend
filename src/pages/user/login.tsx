@@ -1,9 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import MicStatus from "@/components/MicStatus";
+import { useMic } from "@/context/MicContext"
+import LoginRecordButton from "@/components/LoginRecordButton";
 
 export default function Login_user() {
+  const { onRec } = useMic();
   const router = useRouter();
   const [role, setRole] = useState<string | null>(null);
   const [name, setName] = useState("");
@@ -43,9 +46,8 @@ export default function Login_user() {
               onChange={(e) => setName(e.target.value)}
               className="border border-[#000000] border-2 p-2 rounded-[5px] w-[200px]"
             />
-            <button className="font-bold border border-[#000000] rounded-[5px] text-[12px] w-[79px]">
-              입력하기
-            </button>
+
+            <LoginRecordButton />
 
             {/* 입력 성공 or 실패 상태 확인 */}
           </div>
@@ -65,9 +67,11 @@ export default function Login_user() {
               onChange={(e) => setHelperName(e.target.value)}
               className="border border-[#000000] border-2 p-2 rounded-[5px] w-[200px]"
             />
-            <button className="font-bold border border-[#000000] rounded-[5px] text-[12px] w-[79px]">
+            {/* <button className="font-bold border border-[#000000] rounded-[5px] text-[12px] w-[79px]">
               입력하기
-            </button>
+            </button> */}
+
+            <LoginRecordButton />
             {/* 입력 성공 or 실패 상태 확인 */}
           </div>
         </div>
@@ -91,17 +95,36 @@ export default function Login_user() {
             </div>
 
             <div className="flex flex-col items-center">
-              <Image
-                src="/images/recording_img.svg"
-                alt="녹음 중"
-                width={48}
-                height={48}
-              ></Image>
-              <h5 className="mt-2">듣고 있어요...</h5>
+              {!onRec ? (
+                <>
+                  {/* 꺼짐 */}
+                  <Image
+                    src="/images/recording_img.svg"
+                    alt="녹음 중"
+                    width={48}
+                    height={48}
+                  ></Image>
+                </>
+              ) : (
+                <>
+                  {/* 켜짐 */}
+                  <Image
+                    src="/images/recordingcolor_img.svg"
+                    alt="녹음 중"
+                    width={48}
+                    height={48}
+                  ></Image>
+                  <h5 className="mt-2">듣고 있어요...</h5>
+                </>
+              )}
+              
             </div>
           </div>
         </div>
       </div>
+
+
+
 
       {/* 현재 마이크 상태 */}
     </div>

@@ -6,6 +6,7 @@ import { useState } from "react";
 export default function EditInforPage() {
   const [name, setName] = useState("");
   const [birthdate, setBirthdate] = useState("");
+  const [password, setPassword] = useState("");
 
 
   const handleSubmit = (e) => {
@@ -28,12 +29,24 @@ export default function EditInforPage() {
         <div className="flex flex-row justify-center items-center">
 
           <form onSubmit={handleSubmit} className="w-full max-w-sm bg-white p-6 border">
-            <div className="mb-4">
+          <div className="mb-4">
               <label className="block text-gray-700 font-medium mb-2">본인의 성함을 입력해주세요.</label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-gray-700 font-medium mb-2">본인의 비밀번호를 입력해주세요.</label>
+              <input
+                type="text"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
 
                 className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
@@ -52,6 +65,29 @@ export default function EditInforPage() {
               />
             </div>
 
+            <div>
+              어르신 목록
+              <div>
+                <div className="flex flex-row justify-between">
+                  <h6>
+                    홍길동
+                  </h6>
+                  <button>
+                    X
+                  </button>
+                </div>
+
+                <div className="flex flex-row justify-between">
+                  <h6>
+                    김민수
+                  </h6>
+                  <button>
+                    X
+                  </button>
+                </div>
+              </div>
+
+            </div>
 
             <button
               type="submit"
