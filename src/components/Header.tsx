@@ -15,9 +15,6 @@ const Header = () => {
         <button onClick={homeButtonClick}>
           <Image src="/images/logo.svg" alt="logo" width={47} height={32} />
         </button>
-        <div>
-          {
-        }</div>
       </div>
     </header>
   );
