@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import axios from "axios";
+import { fetchInitialQuestion, fetchNextQuestion } from "@/api/questionApi";
+import instance from "@/api/questionApi"
 import mic_on from "../../../public/images/mic_on.svg";
 import mic_off from "../../../public/images/mic_off.svg";
+import * as QuestionAPI from "@/api/questionApi";
+
 // 질문 데이터 타입 정의
 interface Question {
   questionId: number;
@@ -20,28 +24,25 @@ export default function DailyRecord() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null); // 파형 그릴 canvas 참조
   const animationRef = useRef<number>(); // requestAnimationFrame 참조
 
-  //API
-  const instance = axios.create({
-    baseURL: "https://sodam-cloudrun-723860755736.asia-northeast3.run.app",
-    timeout: 10000,
-    withCredentials: true, //세션 토큰
-  });
 
-  // 컴포넌트 마운트 시 첫 질문 불러오기
+  // 컴포넌트 마운트 시 질문 불러오기
   useEffect(() => {
-    fetchInitialQuestion();
+    console.log("questionApi 모듈:", QuestionAPI);
+    const loadQuestion = async () => {
+      try {
+        const question = await fetchInitialQuestion();
+        console.log("불러온 질문:", question);
+        setQuestion(question);
+      } catch (error) {
+        console.error("질문 가져오기 실패:", error);
+      }
+    };
+    loadQuestion();
   }, []);
-
-  // 첫 질문 API 호출
-  const fetchInitialQuestion = async () => {
-    const res = await instance.get("/questions");
-    setQuestion(res.data.result);
-  };
-
-  // 다음 질문 API 호출
-  const fetchNextQuestion = async () => {
-    const res = await instance.get("/questions/next");
-    setQuestion(res.data.result);
+  
+  const handleNextQuestion = async () => {
+    const question = await fetchNextQuestion();
+    setQuestion(question);
   };
 
   // 녹음 시작
@@ -79,8 +80,8 @@ export default function DailyRecord() {
       <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-4">
-            하루 전달이 완료되었습니다! 수고하셨습니다 😊s
-          </h1>
+            하루 전달이 완료되었습니다! 수고하셨습니다 😊
+          </h1> 
         </div>
       </div>
     );

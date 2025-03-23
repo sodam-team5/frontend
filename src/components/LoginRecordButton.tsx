@@ -1,13 +1,15 @@
 import { useState, useEffect, useCallback } from "react";
 import { useMic } from "@/context/MicContext";
+import axios from "axios";
 
 const LoginRecordButton = () => {
-  const { onRec, setOnRec } = useMic(); // ✅ 전역 상태 사용
-  const [isRecording, setIsRecording] = useState(false); // 🔥 개별 버튼 상태 추가
+  const { onRec, setOnRec } = useMic(); // 전역 상태 사용
+  const [isRecording, setIsRecording] = useState(false); // 개별 버튼 상태 추가
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [media, setMedia] = useState<MediaRecorder | null>(null);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [audioUrl, setAudioUrl] = useState(null);
+  const [transcribedText, setTranscribedText] = useState<string | null>(null);
 
   const onRecAudio = async () => {
     try {
@@ -58,7 +60,7 @@ const LoginRecordButton = () => {
     console.log(" 녹음 중지");
   };
 
-  const submitAudio = useCallback(() => {
+  const submitAudio = useCallback(async () => {
     if (!audioBlob) {
       console.error(" 오디오 데이터 X");
       return;
@@ -70,10 +72,34 @@ const LoginRecordButton = () => {
       lastModified: new Date().getTime(),
     });
 
-    console.log("파일 정보:", file);
-    console.log("파일 미리보기 URL:", URL.createObjectURL(file));
+    // 여기서 API 호출을 통해 텍스트 변환 요청
+    try {
+      const formData = new FormData();
+      formData.append("audio", file); // 오디오 파일 추가
+
+      // 실제 API URL을 사용해 주세요. (예시 URL)
+      const response = await axios.post(
+        "https://sodam-cloudrun-723860755736.asia-northeast3.run.app/stt/answer/{questionId}",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      // 응답 처리 (result는 변환된 텍스트로 가정)
+      if (response.data.isSuccess) {
+        setTranscribedText(response.data.result); // 텍스트를 상태로 설정
+      } else {
+        console.error("STT 변환 실패:", response.data.message);
+      }
+    } catch (err) {
+      console.error("API 호출 중 오류 발생:", err);
+    }
   }, [audioBlob]);
 
+  // 오디오 녹음 후 변환된 텍스트를 자동으로 제출
   useEffect(() => {
     if (audioBlob) {
       submitAudio();
