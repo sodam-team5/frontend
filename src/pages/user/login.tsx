@@ -2,9 +2,11 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import MicStatus from "@/components/MicStatus";
+import { useMic } from "@/context/MicContext"
 import LoginRecordButton from "@/components/LoginRecordButton";
 
 export default function Login_user() {
+  const { onRec } = useMic();
   const router = useRouter();
   const [role, setRole] = useState<string | null>(null);
   const [name, setName] = useState("");
@@ -93,13 +95,29 @@ export default function Login_user() {
             </div>
 
             <div className="flex flex-col items-center">
-              <Image
-                src="/images/recording_img.svg"
-                alt="녹음 중"
-                width={48}
-                height={48}
-              ></Image>
-              <h5 className="mt-2">듣고 있어요...</h5>
+              {!onRec ? (
+                <>
+                  {/* 꺼짐 */}
+                  <Image
+                    src="/images/recording_img.svg"
+                    alt="녹음 중"
+                    width={48}
+                    height={48}
+                  ></Image>
+                </>
+              ) : (
+                <>
+                  {/* 켜짐 */}
+                  <Image
+                    src="/images/recordingcolor_img.svg"
+                    alt="녹음 중"
+                    width={48}
+                    height={48}
+                  ></Image>
+                  <h5 className="mt-2">듣고 있어요...</h5>
+                </>
+              )}
+              
             </div>
           </div>
         </div>
